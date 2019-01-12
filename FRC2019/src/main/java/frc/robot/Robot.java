@@ -10,6 +10,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +29,10 @@ public class Robot extends IterativeRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private Spark RB, RF, LB, LF;
+  private SpeedControllerGroup left, right;
+  private Joystick Logitech;
+  private DifferentialDrive drive;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -33,6 +43,14 @@ public class Robot extends IterativeRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    Spark RF = new Spark(0);
+    Spark RB = new Spark(1);
+    Spark LF = new Spark(2);
+    Spark LB = new Spark(3);
+    SpeedControllerGroup left = new SpeedControllerGroup(LB, LF);
+    SpeedControllerGroup right = new SpeedControllerGroup(RB, RF);
+    DifferentialDrive drive = new DifferentialDrive(left, right);
+
   }
 
   /**
@@ -87,6 +105,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void teleopPeriodic() {
+    drive.arcadeDrive(Logitech.getY(), Logitech.getZ());
   }
 
   /**
