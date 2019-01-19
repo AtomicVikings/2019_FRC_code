@@ -7,15 +7,37 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PWMVictorSPX;
 
-public class Robot extends IterativeRobot {
+
+
+/**
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the IterativeRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the build.gradle file in the
+ * project.
+ */
+public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private Spark RB, RF, LB, LF;
+  private SpeedControllerGroup left, right;
+  private Joystick Logitech;
+  private DifferentialDrive drive;
+
+  //mechs
+  private PWMVictorSPX intakyThingy, grabbyThingy, shootyThingy;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -26,6 +48,23 @@ public class Robot extends IterativeRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    RF    = new Spark(0);
+    RB    = new Spark(1);
+    LF    = new Spark(2);
+    LB    = new Spark(3);
+    left  = new SpeedControllerGroup(LB, LF);
+    right = new SpeedControllerGroup(RB, RF);
+    drive = new DifferentialDrive(left, right);
+    CameraServer.getInstance().startAutomaticCapture();
+    Logitech = new Joystick(0);
+
+    //initialize mechs
+    //PWM's
+    shootyThingy    = new PWMVictorSPX(5);
+    intakyThingy    = new PWMVictorSPX(4);
+    grabbyThingy    = new PWMVictorSPX(6);
+    
+
   }
 
   /**
@@ -70,7 +109,6 @@ public class Robot extends IterativeRobot {
         break;
       case kDefaultAuto:
       default:
-        // Put default auto code here
         break;
     }
   }
@@ -80,6 +118,32 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void teleopPeriodic() {
+    drive.arcadeDrive(Logitech.getRawAxis(1), Logitech.getRawAxis(4));
+
+    if (Logitech.getRawButton(2) == true) {
+      /** 
+       When you get to testing with real mechs, make sure 
+       to set values that actually work 
+      */
+      intakyThingy.set(-1);
+
+
+    } else {
+      //mess with this and I castrate you
+      intakyThingy.set(0);
+    }
+
+    if (Logitech.getRawButton(4) == true) {
+      shootyThingy.set(-1);
+    } else {
+      shootyThingy.set(0);
+    }
+
+    if (Logitech.getRawButton(3) == true) {
+      grabbyThingy.set(-1);
+    } else {
+      grabbyThingy.set(0);
+    }
   }
 
   /**
