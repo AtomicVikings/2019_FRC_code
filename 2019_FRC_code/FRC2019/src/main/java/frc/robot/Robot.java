@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private Spark RB, RF, LB, LF;
+  private Spark RB, RF, LB, LF, pickupThingy;
   private SpeedControllerGroup left, right;
   private Joystick Logitech;
   private DifferentialDrive drive;
@@ -48,22 +48,24 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    RF    = new Spark(0);
-    RB    = new Spark(1);
-    LF    = new Spark(2);
-    LB    = new Spark(3);
-    left  = new SpeedControllerGroup(LB, LF);
-    right = new SpeedControllerGroup(RB, RF);
-    drive = new DifferentialDrive(left, right);
+    RF            = new Spark(0);
+    RB            = new Spark(1);
+    LF            = new Spark(2);
+    LB            = new Spark(3);
+    left          = new SpeedControllerGroup(LB, LF);
+    right         = new SpeedControllerGroup(RB, RF);
+    drive         = new DifferentialDrive(left, right);
+    Logitech      = new Joystick(0);
+
+    
     CameraServer.getInstance().startAutomaticCapture();
-    Logitech = new Joystick(0);
 
     //initialize mechs
     //PWM's
     shootyThingy    = new PWMVictorSPX(5);
     intakyThingy    = new PWMVictorSPX(4);
     grabbyThingy    = new PWMVictorSPX(6);
-    
+    pickupThingy    = new Spark(7);
 
   }
 
@@ -144,6 +146,12 @@ public class Robot extends TimedRobot {
     } else {
       grabbyThingy.set(0);
     }
+
+    if (Logitech.getRawButton(1) == true) {
+      pickupThingy.set(.5);
+    } else {
+      pickupThingy.set(0);
+    }
   }
 
   /**
@@ -153,7 +161,3 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
   }
 }
-
-
-
-
