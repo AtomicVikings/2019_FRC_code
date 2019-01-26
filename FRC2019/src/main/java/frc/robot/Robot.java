@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer; 
 
 
 
@@ -39,6 +40,7 @@ public class Robot extends TimedRobot {
   private DifferentialDrive drive;
   private Compressor compressor;
   private Solenoid Charizard, Blastoise, Venusuar;
+  private Timer timeRemaining;
   //Do you think god stays in heaven in fear of what he's created?
 
   //mechs
@@ -53,6 +55,8 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    //Other Things
+    timeRemaining = new Timer();
     //PWM
     RF            = new Spark(0);
     RB            = new Spark(1);
@@ -134,15 +138,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    //Drive Command
     drive.arcadeDrive(Logitech.getRawAxis(1), Logitech.getRawAxis(4));
 
+    //Mecanics Commands
     if (Logitech.getRawButton(2) == true) {
       /** 
        When you get to testing with real mechs, make sure 
        to set values that actually work 
       */
       intakyThingy.set(-1);
-
 
     } else {
       //mess with this and I castrate you
