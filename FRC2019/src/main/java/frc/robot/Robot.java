@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Timer; 
+import edu.wpi.first.wpilibj.Timer;
 
 
 
@@ -57,6 +57,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
     //Other Things
     timeRemaining = new Timer();
+
+
     //PWM
     RF            = new Spark(0);
     RB            = new Spark(1);
@@ -138,8 +140,19 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    timeRemaining.start();
+
     //Drive Command
     drive.arcadeDrive(Logitech.getRawAxis(1), Logitech.getRawAxis(4));
+
+    //Controller Rumble
+    if (timeRemaining == 35) {
+      Logitech.setRumble(kLeftRumble, 1)
+      Logitech.setRumble(kRightRumble, 1)
+    }
+    else {
+
+    }
 
     //Mecanics Commands
     if (Logitech.getRawButton(2) == true) {
