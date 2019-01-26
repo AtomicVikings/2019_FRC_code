@@ -11,11 +11,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.Solenoid;
 
 
 
@@ -35,6 +37,9 @@ public class Robot extends TimedRobot {
   private SpeedControllerGroup left, right;
   private Joystick Logitech;
   private DifferentialDrive drive;
+  private Compressor compressor;
+  private Solenoid Charizard, Blastoise, Venusuar;
+  //Do you think god stays in heaven in fear of what he's created?
 
   //mechs
   private PWMVictorSPX intakyThingy, grabbyThingy, shootyThingy;
@@ -57,6 +62,8 @@ public class Robot extends TimedRobot {
     drive         = new DifferentialDrive(left, right);
     Logitech      = new Joystick(0);
 
+    //CAN
+    compressor    = new Compressor(1);
     
     CameraServer.getInstance().startAutomaticCapture();
 
