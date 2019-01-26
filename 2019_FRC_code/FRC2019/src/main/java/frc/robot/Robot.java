@@ -148,7 +148,7 @@ public class Robot extends TimedRobot {
     }
 
     if (Logitech.getRawButton(1) == true) {
-      pickupThingy.set(.5);
+      pickupThingy.set(1);
     } else {
       pickupThingy.set(0);
     }
