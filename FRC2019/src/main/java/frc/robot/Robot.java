@@ -67,8 +67,9 @@ public class Robot extends TimedRobot {
     compressor    = new Compressor(1);
 
     //Solenoid
-    Charizard     = new Solenoid();
-
+    Charizard     = new Solenoid(0);
+    Blastoise     = new Solenoid(1);
+    Venusuar      = new Solenoid(2);
 
     //Camera
     CameraServer.getInstance().startAutomaticCapture();
@@ -164,6 +165,16 @@ public class Robot extends TimedRobot {
       pickupThingy.set(1);
     } else {
       pickupThingy.set(0);
+    }
+
+    if (Logitech.getRawButton(6) == true) {
+      Charizard.set(true);
+      Blastoise.set(true);
+      Venusuar.set(true);
+    } else {
+      Charizard.set(false);
+      Blastoise.set(false);
+      Venusuar.set(false);
     }
   }
 
