@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    //PWM
     RF            = new Spark(0);
     RB            = new Spark(1);
     LF            = new Spark(2);
