@@ -20,11 +20,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
-
-
-
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -134,62 +129,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-//Drive Command
-drive.arcadeDrive(Logitech.getRawAxis(1), Logitech.getRawAxis(4));
-
-//Controller Rumble
-/*if (timeRemaining == 35) {
-  Logitech.setRumble(kLeftRumble, 1);
-  Logitech.setRumble(kRightRumble, 1);
-}
-else {
-
-}
-*/
-
-//Mecanics Commands
-if (Logitech.getRawButton(2) == true) {
-  /** 
-   When you get to testing with real mechs, make sure 
-   to set values that actually work 
-  */
-  intakyThingy.set(-1);
-  intakyThingy1.set(1);
-
-} else {
-  //mess with this and I castrate you
-  intakyThingy.set(0);
-}
-
-if (Logitech.getRawButton(4) == true) {
-  conveyorThingy.set(-1);
-} else {
-  conveyorThingy.set(0);
-}
-
-if (Logitech.getRawButton(3) == true) {
-  HatchyThingy.set(-1);
-} else {
-  HatchyThingy.set(0);
-}
-
-if (Logitech.getRawButton(1) == true) {
-  pickupThingy.set(1);
-} else {
-  pickupThingy.set(0);
-}
-
-if (Logitech.getRawButton(6) == true) {
-  ShifterThingy.set(true);
-  ShifterThingy1.set(true);
-  Venusuar.set(true);
-}
-
-if (Logitech.getRawButton(7) == true) {
-  ShifterThingy.set(false);
-  ShifterThingy1.set(false);
-  Venusuar.set(false);
-}
+    driveyThingy();
   }
 
   /**
@@ -197,20 +137,19 @@ if (Logitech.getRawButton(7) == true) {
    */
   @Override
   public void teleopPeriodic() {
-    timeRemaining.start();
+    driveyThingy();
+  }
 
+  /**
+   * This function is called periodically during test mode.
+   */
+  @Override
+  public void testPeriodic() {
+  }
+
+  public void driveyThingy() {
     //Drive Command
     drive.arcadeDrive(Logitech.getRawAxis(1), Logitech.getRawAxis(4));
-
-    //Controller Rumble
-    /*if (timeRemaining == 35) {
-      Logitech.setRumble(kLeftRumble, 1);
-      Logitech.setRumble(kRightRumble, 1);
-    }
-    else {
-
-    }
-    */
 
     //Mecanics Commands
     if (Logitech.getRawButton(2) == true) {
@@ -244,23 +183,19 @@ if (Logitech.getRawButton(7) == true) {
       pickupThingy.set(0);
     }
     
+    //Shifters
     if (Logitech.getRawButton(6) == true) {
       ShifterThingy.set(true);
       ShifterThingy1.set(true);
-      Venusuar.set(true);
+      //Venusuar.set(true);
     }
 
+    // KILL BUTTON
     if (Logitech.getRawButton(7) == true) {
       ShifterThingy.set(false);
       ShifterThingy1.set(false);
       Venusuar.set(false);
+      pushyThingy.set(false);
     }
-  }
-
-  /**
-   * This function is called periodically during test mode.
-   */
-  @Override
-  public void testPeriodic() {
   }
 }
