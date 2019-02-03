@@ -42,12 +42,12 @@ public class Robot extends TimedRobot {
   private Joystick Logitech;
   private DifferentialDrive drive;
   private Compressor compressor;
-  private Solenoid Charizard, Blastoise, Venusuar, pushyThingy;
+  private Solenoid ShifterThingy, ShifterThingy1, Venusuar, pushyThingy;
   private Timer timeRemaining;
   //Do you think god stays in heaven in fear of what he's created?
 
   //mechs
-  private Spark intakyThingy, grabbyThingy, shootyThingy, pickupThingy, intakyThingy1 ;
+  private Spark intakyThingy, HatchyThingy, conveyorThingy, pickupThingy, intakyThingy1 ;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -63,25 +63,25 @@ public class Robot extends TimedRobot {
 
     //PWM
     //We may change from 4 to 6 SPX
-    RF            = new PWMVictorSPX(0);
-    RB            = new PWMVictorSPX(1);
-    LF            = new PWMVictorSPX(2);
-    LB            = new PWMVictorSPX(3);
-    left          = new SpeedControllerGroup(LB, LF);
-    right         = new SpeedControllerGroup(RB, RF);
-    drive         = new DifferentialDrive(left, right);
-    Logitech      = new Joystick(0);
+    RF              = new PWMVictorSPX(0);
+    RB              = new PWMVictorSPX(1);
+    LF              = new PWMVictorSPX(2);
+    LB              = new PWMVictorSPX(3);
+    left            = new SpeedControllerGroup(LB, LF);
+    right           = new SpeedControllerGroup(RB, RF);
+    drive           = new DifferentialDrive(left, right);
+    Logitech        = new Joystick(0);
 
     //CAN
-    compressor    = new Compressor(1);
+    compressor      = new Compressor(1);
 
     //Solenoid
-    Charizard     = new Solenoid(0);
-    Blastoise     = new Solenoid(1);
+    ShifterThingy   = new Solenoid(0);
+    ShifterThingy1  = new Solenoid(1);
 
 
-    Venusuar      = new Solenoid(2);
-    pushyThingy   = new Solenoid(3);
+    Venusuar        = new Solenoid(2);
+    pushyThingy     = new Solenoid(3);
     
 
     //Camera
@@ -89,12 +89,12 @@ public class Robot extends TimedRobot {
 
     //initialize mechs
     //PWM's
-    shootyThingy    = new Spark(5);
-    intakyThingy    = new Spark(4);
-    intakyThingy1   = new Spark(7);
+    conveyorThingy    = new Spark(5);
+    intakyThingy      = new Spark(4);
+    intakyThingy1     = new Spark(7);
 
-    grabbyThingy    = new Spark(6);
-    pickupThingy    = new Spark(9);
+    HatchyThingy      = new Spark(6);
+    pickupThingy      = new Spark(9);
 
   }
 
@@ -134,14 +134,62 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        break;
-    }
+//Drive Command
+drive.arcadeDrive(Logitech.getRawAxis(1), Logitech.getRawAxis(4));
+
+//Controller Rumble
+/*if (timeRemaining == 35) {
+  Logitech.setRumble(kLeftRumble, 1);
+  Logitech.setRumble(kRightRumble, 1);
+}
+else {
+
+}
+*/
+
+//Mecanics Commands
+if (Logitech.getRawButton(2) == true) {
+  /** 
+   When you get to testing with real mechs, make sure 
+   to set values that actually work 
+  */
+  intakyThingy.set(-1);
+  intakyThingy1.set(1);
+
+} else {
+  //mess with this and I castrate you
+  intakyThingy.set(0);
+}
+
+if (Logitech.getRawButton(4) == true) {
+  conveyorThingy.set(-1);
+} else {
+  conveyorThingy.set(0);
+}
+
+if (Logitech.getRawButton(3) == true) {
+  HatchyThingy.set(-1);
+} else {
+  HatchyThingy.set(0);
+}
+
+if (Logitech.getRawButton(1) == true) {
+  pickupThingy.set(1);
+} else {
+  pickupThingy.set(0);
+}
+
+if (Logitech.getRawButton(6) == true) {
+  ShifterThingy.set(true);
+  ShifterThingy1.set(true);
+  Venusuar.set(true);
+}
+
+if (Logitech.getRawButton(7) == true) {
+  ShifterThingy.set(false);
+  ShifterThingy1.set(false);
+  Venusuar.set(false);
+}
   }
 
   /**
@@ -163,6 +211,7 @@ public class Robot extends TimedRobot {
 
     }
     */
+
     //Mecanics Commands
     if (Logitech.getRawButton(2) == true) {
       /** 
@@ -170,6 +219,7 @@ public class Robot extends TimedRobot {
        to set values that actually work 
       */
       intakyThingy.set(-1);
+      intakyThingy1.set(1);
 
     } else {
       //mess with this and I castrate you
@@ -177,15 +227,15 @@ public class Robot extends TimedRobot {
     }
 
     if (Logitech.getRawButton(4) == true) {
-      shootyThingy.set(-1);
+      conveyorThingy.set(-1);
     } else {
-      shootyThingy.set(0);
+      conveyorThingy.set(0);
     }
 
     if (Logitech.getRawButton(3) == true) {
-      grabbyThingy.set(-1);
+      HatchyThingy.set(-1);
     } else {
-      grabbyThingy.set(0);
+      HatchyThingy.set(0);
     }
 
     if (Logitech.getRawButton(1) == true) {
@@ -193,14 +243,16 @@ public class Robot extends TimedRobot {
     } else {
       pickupThingy.set(0);
     }
-
+    
     if (Logitech.getRawButton(6) == true) {
-      Charizard.set(true);
-      Blastoise.set(true);
+      ShifterThingy.set(true);
+      ShifterThingy1.set(true);
       Venusuar.set(true);
-    } else {
-      Charizard.set(false);
-      Blastoise.set(false);
+    }
+
+    if (Logitech.getRawButton(7) == true) {
+      ShifterThingy.set(false);
+      ShifterThingy1.set(false);
       Venusuar.set(false);
     }
   }
