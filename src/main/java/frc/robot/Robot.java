@@ -7,18 +7,21 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.PWMVictorSPX;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+
+
 
 
 
@@ -34,17 +37,17 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private Spark RB, RF, LB, LF, pickupThingy;
+  private PWMVictorSPX RB, RF, LB, LF;
   private SpeedControllerGroup left, right;
   private Joystick Logitech;
   private DifferentialDrive drive;
   private Compressor compressor;
-  private Solenoid Charizard, Blastoise, Venusuar;
+  private Solenoid Charizard, Blastoise, Venusuar, pushyThingy;
   private Timer timeRemaining;
   //Do you think god stays in heaven in fear of what he's created?
 
   //mechs
-  private PWMVictorSPX intakyThingy, grabbyThingy, shootyThingy;
+  private Spark intakyThingy, grabbyThingy, shootyThingy, pickupThingy, intakyThingy1 ;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -58,12 +61,12 @@ public class Robot extends TimedRobot {
     //Other Things
     timeRemaining = new Timer();
 
-
     //PWM
-    RF            = new Spark(0);
-    RB            = new Spark(1);
-    LF            = new Spark(2);
-    LB            = new Spark(3);
+    //We may change from 4 to 6 SPX
+    RF            = new PWMVictorSPX(0);
+    RB            = new PWMVictorSPX(1);
+    LF            = new PWMVictorSPX(2);
+    LB            = new PWMVictorSPX(3);
     left          = new SpeedControllerGroup(LB, LF);
     right         = new SpeedControllerGroup(RB, RF);
     drive         = new DifferentialDrive(left, right);
@@ -75,17 +78,23 @@ public class Robot extends TimedRobot {
     //Solenoid
     Charizard     = new Solenoid(0);
     Blastoise     = new Solenoid(1);
+
+
     Venusuar      = new Solenoid(2);
+    pushyThingy   = new Solenoid(3);
+    
 
     //Camera
     CameraServer.getInstance().startAutomaticCapture();
 
     //initialize mechs
     //PWM's
-    shootyThingy    = new PWMVictorSPX(5);
-    intakyThingy    = new PWMVictorSPX(4);
-    grabbyThingy    = new PWMVictorSPX(6);
-    pickupThingy    = new Spark(7);
+    shootyThingy    = new Spark(5);
+    intakyThingy    = new Spark(4);
+    intakyThingy1   = new Spark(7);
+
+    grabbyThingy    = new Spark(6);
+    pickupThingy    = new Spark(9);
 
   }
 
@@ -146,14 +155,14 @@ public class Robot extends TimedRobot {
     drive.arcadeDrive(Logitech.getRawAxis(1), Logitech.getRawAxis(4));
 
     //Controller Rumble
-    if (timeRemaining == 35) {
-      Logitech.setRumble(kLeftRumble, 1)
-      Logitech.setRumble(kRightRumble, 1)
+    /*if (timeRemaining == 35) {
+      Logitech.setRumble(kLeftRumble, 1);
+      Logitech.setRumble(kRightRumble, 1);
     }
     else {
 
     }
-
+    */
     //Mecanics Commands
     if (Logitech.getRawButton(2) == true) {
       /** 
