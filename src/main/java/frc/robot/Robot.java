@@ -38,7 +38,6 @@ public class Robot extends TimedRobot {
   private DifferentialDrive drive;
   private Compressor compressor;
   private Solenoid ShifterThingy, ShifterThingy1, Venusuar, pushyThingy;
-  private Timer timeRemaining;
   //Do you think god stays in heaven in fear of what he's created?
 
   //mechs
@@ -54,7 +53,6 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     //Other Things
-    timeRemaining = new Timer();
 
     //PWM
     //We may change from 4 to 6 SPX
@@ -69,6 +67,7 @@ public class Robot extends TimedRobot {
 
     //CAN
     compressor      = new Compressor(1);
+    compressor.setClosedLoopControl(true);
 
     //Solenoid
     ShifterThingy   = new Solenoid(0);
@@ -150,6 +149,14 @@ public class Robot extends TimedRobot {
   public void driveyThingy() {
     //Drive Command
     drive.arcadeDrive(Logitech.getRawAxis(1), Logitech.getRawAxis(4));
+    
+    //May need a start statement for compressor
+    //http://first.wpi.edu/FRC/roborio/beta/docs/java/edu/wpi/first/wpilibj/Compressor.html#enabled--
+    boolean enabled         = compressor.enabled();
+    boolean pressureSwitch  = compressor.getPressureSwitchValue();
+    double  current         = compressor.getCompressorCurrent();
+
+
 
     //Mecanics Commands
     if (Logitech.getRawButton(2) == true) {
