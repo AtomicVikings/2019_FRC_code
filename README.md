@@ -13,4 +13,7 @@ rightRear
 1 INTAKE:
 ballIntake
 
+1 HATCH MECH:
+hatchMech
 
+I'm going to create a new repository with nicer stuffs.
