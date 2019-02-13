@@ -27,9 +27,3 @@ public final class Main {
     RobotBase.startRobot(Robot::new);
   }
 }
-
-/**
-intake for ball 	  - spark
-plate grabber		    - spark 
-ball shooting loop 	- spark
-*/

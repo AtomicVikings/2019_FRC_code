@@ -8,14 +8,11 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,16 +29,12 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private PWMVictorSPX RB, RF, LB, LF;
+  
+  private PWMVictorSPX leftFront, leftRear, rightFront, rightRear;
   private SpeedControllerGroup left, right;
-  private Joystick Logitech;
+  private Joystick driver, mechanic;
   private DifferentialDrive drive;
-  private Compressor compressor;
-  private Solenoid ShifterThingy, ShifterThingy1, Venusuar, pushyThingy;
-  //Do you think god stays in heaven in fear of what he's created?
-
-  //mechs
-  private Spark intakyThingy, HatchyThingy, conveyorThingy, pickupThingy, intakyThingy1 ;
+  private Spark ballIntake, hatchMech;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -52,43 +45,27 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    //Other Things
 
     //PWM
-    //We may change from 4 to 6 SPX
-    RF              = new PWMVictorSPX(0);
-    RB              = new PWMVictorSPX(1);
-    LF              = new PWMVictorSPX(2);
-    LB              = new PWMVictorSPX(3);
-    left            = new SpeedControllerGroup(LB, LF);
-    right           = new SpeedControllerGroup(RB, RF);
-    drive           = new DifferentialDrive(left, right);
-    Logitech        = new Joystick(0);
+    //Drive
+      leftFront = new PWMVictorSPX(0);
+      leftRear = new PWMVictorSPX(1);
+      rightFront = new PWMVictorSPX(2);
+      rightRear = new PWMVictorSPX(3);
+      left = new SpeedControllerGroup(leftFront, leftRear);
+      right  = new SpeedControllerGroup(rightFront, rightRear);
+      drive = new DifferentialDrive(left, right);
+      driver = new Joystick(0);
+      mechanic =  new Joystick(1);
 
-    //CAN
-    compressor      = new Compressor(1);
-    compressor.setClosedLoopControl(true);
-
-    //Solenoid
-    ShifterThingy   = new Solenoid(0);
-    ShifterThingy1  = new Solenoid(1);
-
-
-    Venusuar        = new Solenoid(2);
-    pushyThingy     = new Solenoid(3);
-    
+    //Control
+      ballIntake = new Spark(4);
+      hatchMech = new Spark(5);
 
     //Camera
     CameraServer.getInstance().startAutomaticCapture();
 
-    //initialize mechs
-    //PWM's
-    conveyorThingy    = new Spark(5);
-    intakyThingy      = new Spark(4);
-    intakyThingy1     = new Spark(7);
-
-    HatchyThingy      = new Spark(6);
-    pickupThingy      = new Spark(9);
+    
 
   }
 
@@ -147,62 +124,33 @@ public class Robot extends TimedRobot {
   }
 
   public void driveyThingy() {
-    //Drive Command
-    drive.arcadeDrive(Logitech.getRawAxis(1), Logitech.getRawAxis(4));
-    
-    //May need a start statement for compressor
-    //http://first.wpi.edu/FRC/roborio/beta/docs/java/edu/wpi/first/wpilibj/Compressor.html#enabled--
-    boolean enabled         = compressor.enabled();
-    boolean pressureSwitch  = compressor.getPressureSwitchValue();
-    double  current         = compressor.getCompressorCurrent();
+    //Drive
+      drive.arcadeDrive(driver.getRawAxis(1), driver.getRawAxis(4));
+
+    //Mecanics
+      if (mechanic.getRawButton(1) == true) {
+        //This is the ball intake on
+        //this may spin in the wrong direction, fix with either code or current polarity.
+        ballIntake.set(1);
+      } else {
+        ballIntake.set(0);
+      } if (mechanic.getRawButton(2) == true) {
+        ballIntake.set(-1);
+      } else {
+        ballIntake.set(0);
+      } if (mechanic.getRawButton(5) == true) {
+        //this is hatch up
+        hatchMech.set(1);
+      } else {
+        hatchMech.set(0);
+
+      } if (mechanic.getRawButton(6) == true) {
+        //this is hatch down
+        hatchMech.set(-1);
+      } else {
+        hatchMech.set(0);
+      }
 
 
-
-    //Mecanics Commands
-    if (Logitech.getRawButton(2) == true) {
-      /** 
-       When you get to testing with real mechs, make sure 
-       to set values that actually work 
-      */
-      intakyThingy.set(-1);
-      intakyThingy1.set(1);
-
-    } else {
-      //mess with this and I castrate you
-      intakyThingy.set(0);
-    }
-
-    if (Logitech.getRawButton(4) == true) {
-      conveyorThingy.set(-1);
-    } else {
-      conveyorThingy.set(0);
-    }
-
-    if (Logitech.getRawButton(3) == true) {
-      HatchyThingy.set(-1);
-    } else {
-      HatchyThingy.set(0);
-    }
-
-    if (Logitech.getRawButton(1) == true) {
-      pickupThingy.set(1);
-    } else {
-      pickupThingy.set(0);
-    }
-    
-    //Shifters
-    if (Logitech.getRawButton(6) == true) {
-      ShifterThingy.set(true);
-      ShifterThingy1.set(true);
-      //Venusuar.set(true);
-    }
-
-    // KILL BUTTON
-    if (Logitech.getRawButton(7) == true) {
-      ShifterThingy.set(false);
-      ShifterThingy1.set(false);
-      Venusuar.set(false);
-      pushyThingy.set(false);
-    }
   }
 }
