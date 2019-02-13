@@ -135,6 +135,7 @@ public class Robot extends TimedRobot {
       } else {
         ballIntake.set(0);
       } if (mechanic.getRawButton(2) == true) {
+        //this is ball intake shoot
         ballIntake.set(-1);
       } else {
         ballIntake.set(0);
