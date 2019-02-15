@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    
+
     //Drive
       //I have to change these using Pheonix software to work with CAN
       leftFront = new WPI_VictorSPX(1);
@@ -59,8 +59,8 @@ public class Robot extends TimedRobot {
       mechanic =  new Joystick(1);
 
     //Control
-      ballIntake = new Spark(4);
-      hatchMech = new Spark(5);
+      ballIntake = new Spark(0);
+      hatchMech = new Spark(1);
 
     //Camera
     CameraServer.getInstance().startAutomaticCapture();
