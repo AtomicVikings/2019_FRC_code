@@ -9,7 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
-import com.ctre.phoenix;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   
-  private PWMVictorSPX leftFront, leftRear, rightFront, rightRear;
+  private WPI_VictorSPX leftFront, leftRear, rightFront, rightRear;
   private SpeedControllerGroup left, right;
   private Joystick driver, mechanic;
   private DifferentialDrive drive;
@@ -45,13 +45,13 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-
-    //PWM
+    
     //Drive
-      leftFront = new PWMVictorSPX(0);
-      leftRear = new PWMVictorSPX(1);
-      rightFront = new PWMVictorSPX(2);
-      rightRear = new PWMVictorSPX(3);
+      //I have to change these using Pheonix software to work with CAN
+      leftFront = new WPI_VictorSPX(1);
+      leftRear = new WPI_VictorSPX(2);
+      rightFront = new WPI_VictorSPX(3);
+      rightRear = new WPI_VictorSPX(4);
       left = new SpeedControllerGroup(leftFront, leftRear);
       right  = new SpeedControllerGroup(rightFront, rightRear);
       drive = new DifferentialDrive(left, right);
