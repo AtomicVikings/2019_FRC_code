@@ -36,6 +36,9 @@ public class Robot extends TimedRobot {
   private DifferentialDrive drive;
   private Spark ballIntake, hatchMech;
 
+  // I probably owe Zach like $5 for this
+  //-zac yeah lol
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -48,10 +51,10 @@ public class Robot extends TimedRobot {
 
     //Drive
       //I have to change these using Pheonix software to work with CAN
-      leftFront = new WPI_VictorSPX(1);
-      leftRear = new WPI_VictorSPX(2);
-      rightFront = new WPI_VictorSPX(3);
-      rightRear = new WPI_VictorSPX(4);
+      leftFront = new WPI_VictorSPX(4);
+      leftRear = new WPI_VictorSPX(3);
+      rightFront = new WPI_VictorSPX(2);
+      rightRear = new WPI_VictorSPX(1);
       left = new SpeedControllerGroup(leftFront, leftRear);
       right  = new SpeedControllerGroup(rightFront, rightRear);
       drive = new DifferentialDrive(left, right);
@@ -131,23 +134,23 @@ public class Robot extends TimedRobot {
       if (mechanic.getRawButton(1) == true) {
         //This is the ball intake on
         //this may spin in the wrong direction, fix with either code or current polarity.
-        ballIntake.set(1);
+        ballIntake.set(.5);
       } else {
         ballIntake.set(0);
       } if (mechanic.getRawButton(2) == true) {
         //this is ball intake shoot
-        ballIntake.set(-1);
+        ballIntake.set(-.5);
       } else {
         ballIntake.set(0);
       } if (mechanic.getRawButton(5) == true) {
         //this is hatch up
-        hatchMech.set(1);
+        hatchMech.set(.5);
       } else {
         hatchMech.set(0);
 
       } if (mechanic.getRawButton(6) == true) {
         //this is hatch down
-        hatchMech.set(-1);
+        hatchMech.set(-.5);
       } else {
         hatchMech.set(0);
       }
