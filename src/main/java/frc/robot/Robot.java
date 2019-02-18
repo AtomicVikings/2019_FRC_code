@@ -10,7 +10,7 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import edu.wpi.first.wpilibj.Spark;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
   private SpeedControllerGroup left, right;
   private Joystick driver, mechanic;
   private DifferentialDrive drive;
-  private Spark ballIntake, hatchMech;
+  private WPI_TalonSRX ballIntake, hatchMech;
 
   // I probably owe Zach like $5 for this
   //-zac yeah lol
@@ -51,9 +51,9 @@ public class Robot extends TimedRobot {
 
     //Drive
       //I have to change these using Pheonix software to work with CAN
-      leftFront = new WPI_VictorSPX(4);
-      leftRear = new WPI_VictorSPX(3);
-      rightFront = new WPI_VictorSPX(2);
+      leftFront = new WPI_VictorSPX(2);
+      leftRear = new WPI_VictorSPX(4);
+      rightFront = new WPI_VictorSPX(3);
       rightRear = new WPI_VictorSPX(1);
       left = new SpeedControllerGroup(leftFront, leftRear);
       right  = new SpeedControllerGroup(rightFront, rightRear);
@@ -62,8 +62,8 @@ public class Robot extends TimedRobot {
       mechanic =  new Joystick(1);
 
     //Control
-      ballIntake = new Spark(0);
-      hatchMech = new Spark(1);
+      ballIntake = new WPI_TalonSRX(7);
+      hatchMech = new WPI_TalonSRX(8);
 
     //Camera
     CameraServer.getInstance().startAutomaticCapture();
@@ -134,23 +134,23 @@ public class Robot extends TimedRobot {
       if (mechanic.getRawButton(1) == true) {
         //This is the ball intake on
         //this may spin in the wrong direction, fix with either code or current polarity.
-        ballIntake.set(.5);
+        ballIntake.set(-.5);
       } else {
         ballIntake.set(0);
       } if (mechanic.getRawButton(2) == true) {
         //this is ball intake shoot
-        ballIntake.set(-.5);
+        ballIntake.set(1);
       } else {
         ballIntake.set(0);
       } if (mechanic.getRawButton(5) == true) {
         //this is hatch up
-        hatchMech.set(.5);
+        hatchMech.set(-1);
       } else {
         hatchMech.set(0);
 
       } if (mechanic.getRawButton(6) == true) {
         //this is hatch down
-        hatchMech.set(-.5);
+        hatchMech.set(1);
       } else {
         hatchMech.set(0);
       }
