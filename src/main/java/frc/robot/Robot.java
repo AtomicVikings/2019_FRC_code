@@ -128,33 +128,35 @@ public class Robot extends TimedRobot {
 
   public void driveyThingy() {
     //Drive
-      drive.arcadeDrive(driver.getRawAxis(1), driver.getRawAxis(4));
-
+    boolean driveSwitch;
+    if (driver.getRawButton(1) == true) {
+      driveSwitch = true;
+    } else if (driver.getRawButton(2) == true) {
+      driveSwitch = false;
+    }
+    
+    if (driveSwitch == true) {
+      drive.tankDrive(driver.getRawAxis(1), driver.getRawAxis(5));
+    } else {
+      drive.tankDrive(driver.getRawAxis(1) * -1, driver.getRawAxis(5) * -1);
+    }
+      
     //Mecanics
       if (mechanic.getRawButton(1) == true) {
-        //This is the ball intake on
-        //this may spin in the wrong direction, fix with either code or current polarity.
         ballIntake.set(-.5);
+      } else if (mechanic.getRawButton(2) == true) {
+        ballIntake.set(.5);
       } else {
         ballIntake.set(0);
-      } if (mechanic.getRawButton(2) == true) {
-        //this is ball intake shoot
-        ballIntake.set(1);
-      } else {
-        ballIntake.set(0);
-      } if (mechanic.getRawButton(5) == true) {
-        //this is hatch up
+      }
+      
+      if (mechanic.getRawButton(5) == true) {
         hatchMech.set(-1);
-      } else {
-        hatchMech.set(0);
-
-      } if (mechanic.getRawButton(6) == true) {
-        //this is hatch down
+      } else if (mechanic.getRawButton(6) == true) {
         hatchMech.set(1);
       } else {
         hatchMech.set(0);
       }
-
 
   }
 }
