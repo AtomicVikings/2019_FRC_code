@@ -80,9 +80,9 @@ public class Robot extends TimedRobot {
 
     
     if (driveSwitch == true) {
-      drive.arcadeDrive(driver.getRawAxis(1) * -1 * .8, driver.getRawAxis(4) * -1 * .9);
+      drive.arcadeDrive(driver.getRawAxis(1) * -1 * .8, driver.getRawAxis(4) * -1);
     } else {
-      drive.arcadeDrive(driver.getRawAxis(1) * .8, driver.getRawAxis(4) * -1 * .9);
+      drive.arcadeDrive(driver.getRawAxis(1) * .8, driver.getRawAxis(4) * -1);
     }
       
     //Mecanics
