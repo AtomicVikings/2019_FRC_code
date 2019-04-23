@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
   }
 
   public void driveyThingy() {
-    //Drive
+  //Drive
     boolean driveSwitch = false;
     if (driver.getRawButton(3) == true) {
       driveSwitch = true;
@@ -86,17 +86,19 @@ public class Robot extends TimedRobot {
       drive.arcadeDrive(driver.getRawAxis(1) * .8, driver.getRawAxis(4) * -1);
     }
       
-    //Mecanics
+  //Mecanics
+    //This is for 1/2 controller input
     if (controllers == true) {
-        if (driver.getRawButton(1) == true) {
-          ballIntake.set(-.5);
-        } else if (driver.getRawButton(2) == true) {
-          ballIntake.set(.5);
-        } else {
-          ballIntake.set(0);
-        }
-
-      if (driver.getRawButton(5) == true) {
+      //Ball Intake for Driver
+      if (driver.getRawButton(1) == true) {
+        ballIntake.set(-.5);        
+      } else if (driver.getRawButton(2) == true) {
+        ballIntake.set(.5);
+      } else {
+        ballIntake.set(0);
+      }
+      //Hatch for Driver
+      if (driver.getRawButton(6) == true) {
         hatchMech.set(-1);
       } else if (driver.getRawButton(6) == true) {
         hatchMech.set(1);
@@ -104,15 +106,16 @@ public class Robot extends TimedRobot {
         hatchMech.set(0);
       }
     } else if (controllers == false) {
+      //Ball Intake
       if (mechanic.getRawButton(1) == true) {
-          ballIntake.set(-.5);
+        ballIntake.set(-.5);
         } else if (mechanic.getRawButton(2) == true) {
           ballIntake.set(.5);
         } else {
           ballIntake.set(0);
         }
-
-      if (mechanic.getRawButton(5) == true) {
+      //Hatch Mechanism
+      if (mechanic.getRawButton(6) == true) {
         hatchMech.set(-1);
       } else if (mechanic.getRawButton(6) == true) {
         hatchMech.set(1);
