@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
@@ -21,7 +22,7 @@ public class Robot extends TimedRobot {
   private Joystick driver, mechanic;
   private DifferentialDrive drive;
   private WPI_TalonSRX ballIntake, hatchMech;
-  
+  private DigitalInput controllers;
 
   @Override
   public void robotInit() {
@@ -35,7 +36,7 @@ public class Robot extends TimedRobot {
       drive         = new DifferentialDrive(left, right);
       driver        = new Joystick(0);
       mechanic      = new Joystick(1);
-
+      controllers   = new DigitalInput(0);
     //Control
       ballIntake    = new WPI_TalonSRX(7);
       hatchMech     = new WPI_TalonSRX(8);
@@ -72,7 +73,7 @@ public class Robot extends TimedRobot {
   public void driveyThingy() {
     //Drive
     boolean driveSwitch = false;
-    if (driver.getRawButton(5) == true) {
+    if (driver.getRawButton(3) == true) {
       driveSwitch = true;
     } else {
       driveSwitch = false;
@@ -86,14 +87,31 @@ public class Robot extends TimedRobot {
     }
       
     //Mecanics
-      if (mechanic.getRawButton(1) == true) {
-        ballIntake.set(-.5);
-      } else if (mechanic.getRawButton(2) == true) {
-        ballIntake.set(.5);
+    if (controllers == true) {
+        if (driver.getRawButton(1) == true) {
+          ballIntake.set(-.5);
+        } else if (driver.getRawButton(2) == true) {
+          ballIntake.set(.5);
+        } else {
+          ballIntake.set(0);
+        }
+
+      if (driver.getRawButton(5) == true) {
+        hatchMech.set(-1);
+      } else if (driver.getRawButton(6) == true) {
+        hatchMech.set(1);
       } else {
-        ballIntake.set(0);
+        hatchMech.set(0);
       }
-      
+    } else if (controllers == false) {
+      if (mechanic.getRawButton(1) == true) {
+          ballIntake.set(-.5);
+        } else if (mechanic.getRawButton(2) == true) {
+          ballIntake.set(.5);
+        } else {
+          ballIntake.set(0);
+        }
+
       if (mechanic.getRawButton(5) == true) {
         hatchMech.set(-1);
       } else if (mechanic.getRawButton(6) == true) {
@@ -101,5 +119,6 @@ public class Robot extends TimedRobot {
       } else {
         hatchMech.set(0);
       }
+    }  
   }
 }
